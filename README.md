@@ -1,5 +1,4 @@
-# sdra
-سًُدرة للاذكار
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -24,21 +23,28 @@ animation:bg 12s ease infinite;
 }
 
 header{
-padding:25px;
-font-size:30px;
+padding:20px;
+font-size:26px;
 font-weight:bold;
 background:#00000055;
 }
 
+/* 🔥 تحسين الجوال */
 .container{
 max-width:850px;
 margin:auto;
-padding:15px;
+padding:10px;
+}
+
+@media(max-width:600px){
+header{font-size:22px;}
+.card{padding:15px;}
+button{width:100%;}
 }
 
 .card{
 background:rgba(255,255,255,0.06);
-margin:15px 0;
+margin:12px 0;
 padding:20px;
 border-radius:18px;
 box-shadow:0 0 20px #00000066;
@@ -56,24 +62,25 @@ background:linear-gradient(45deg,#d4af37,#ffd700,#fff2a8);
 color:#111;
 font-weight:bold;
 cursor:pointer;
-box-shadow:0 0 15px #ffd70055;
 transition:0.3s;
 }
 
-button:hover{
-transform:scale(1.05);
-box-shadow:0 0 25px #ffd700aa;
-}
+button:hover{transform:scale(1.05);}
 
-/* لون الرقم 0 (العداد) */
 .counter{
-font-size:55px;
+font-size:50px;
 color:#00e5ff;
 margin:10px 0;
 }
 
+.prayer{
+font-size:14px;
+color:#9ad1ff;
+line-height:1.8;
+}
+
 footer{
-margin-top:25px;
+margin-top:20px;
 padding:15px;
 opacity:0.8;
 font-size:14px;
@@ -87,6 +94,7 @@ font-size:14px;
 
 <div class="container">
 
+<!-- الأذكار -->
 <div class="card">
 <h2>💫 دعاء</h2>
 <p id="dua">اللهم اجعل لي من كل هم فرجًا</p>
@@ -99,6 +107,7 @@ font-size:14px;
 <button onclick="newZekr()">ذكر جديد</button>
 </div>
 
+<!-- التسبيح -->
 <div class="card">
 <h2>🔢 التسبيح</h2>
 <div class="counter" id="count">0</div>
@@ -106,24 +115,30 @@ font-size:14px;
 <button onclick="reset()">إعادة</button>
 </div>
 
+<!-- أوقات الصلاة -->
+<div class="card">
+<h2>🕌 أوقات الصلاة</h2>
+<div class="prayer" id="prayer">جاري التحميل...</div>
+</div>
+
+<!-- القرآن -->
+<div class="card">
+<h2>🎧 القرآن الكريم</h2>
+<audio id="quran" controls></audio>
+<br>
+<button onclick="nextSurah()">السورة التالية</button>
+</div>
+
+<!-- نشر -->
 <div class="card">
 <h2>📢 نشر الموقع</h2>
 <button onclick="shareSite()">نسخ رابط الموقع</button>
 <p id="msg"></p>
 </div>
 
-<div class="card">
-<h2>🎧 صوت القرآن</h2>
-<audio controls>
-<source src="https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/1.mp3">
-</audio>
 </div>
 
-</div>
-
-<footer>
-👤 أحمد الدوسري
-</footer>
+<footer>👤 أحمد الدوسري</footer>
 
 <script>
 
@@ -167,12 +182,53 @@ count=0;
 document.getElementById("count").innerText=count;
 }
 
-/* زر نسخ الرابط */
+/* مشاركة */
 function shareSite(){
 navigator.clipboard.writeText(window.location.href);
 document.getElementById("msg").innerText="تم نسخ الرابط ✔️";
 setTimeout(()=>{document.getElementById("msg").innerText="";},2000);
 }
+
+/* 🕌 أوقات الصلاة حسب الموقع */
+function loadPrayer(){
+navigator.geolocation.getCurrentPosition(async(pos)=>{
+let lat=pos.coords.latitude;
+let lon=pos.coords.longitude;
+
+let url=`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`;
+
+let res=await fetch(url);
+let data=await res.json();
+let t=data.data.timings;
+
+document.getElementById("prayer").innerHTML=
+`الفجر: ${t.Fajr}<br>
+الظهر: ${t.Dhuhr}<br>
+العصر: ${t.Asr}<br>
+المغرب: ${t.Maghrib}<br>
+العشاء: ${t.Isha}`;
+});
+}
+
+/* 🎧 القرآن (سور متغيرة) */
+const surahs=[
+"https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/1.mp3",
+"https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/36.mp3",
+"https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/55.mp3",
+"https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/67.mp3"
+];
+
+let index=0;
+let audio=document.getElementById("quran");
+audio.src=surahs[index];
+
+function nextSurah(){
+index=(index+1)%surahs.length;
+audio.src=surahs[index];
+audio.play();
+}
+
+loadPrayer();
 
 </script>
 
