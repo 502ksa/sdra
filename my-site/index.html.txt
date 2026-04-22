@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سُدرة للأذكار</title>
+
+<style>
+body{
+margin:0;
+font-family:tahoma;
+color:white;
+text-align:center;
+background:linear-gradient(-45deg,#05070d,#0b0f1a,#111827,#05070d);
+background-size:400% 400%;
+animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+header{
+padding:25px;
+font-size:30px;
+font-weight:bold;
+background:#00000055;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:15px;
+}
+
+.card{
+background:rgba(255,255,255,0.06);
+margin:15px 0;
+padding:20px;
+border-radius:18px;
+box-shadow:0 0 20px #00000066;
+backdrop-filter:blur(10px);
+}
+
+h2{color:#ffd700;}
+
+button{
+padding:12px 18px;
+margin:6px;
+border:none;
+border-radius:12px;
+background:linear-gradient(45deg,#d4af37,#ffd700,#fff2a8);
+color:#111;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 15px #ffd70055;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px #ffd700aa;
+}
+
+/* لون الرقم 0 (العداد) */
+.counter{
+font-size:55px;
+color:#00e5ff;
+margin:10px 0;
+}
+
+footer{
+margin-top:25px;
+padding:15px;
+opacity:0.8;
+font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🌙 سُدرة للأذكار</header>
+
+<div class="container">
+
+<div class="card">
+<h2>💫 دعاء</h2>
+<p id="dua">اللهم اجعل لي من كل هم فرجًا</p>
+<button onclick="newDua()">تغيير الدعاء</button>
+</div>
+
+<div class="card">
+<h2>📿 الأذكار</h2>
+<p id="zekr">سبحان الله</p>
+<button onclick="newZekr()">ذكر جديد</button>
+</div>
+
+<div class="card">
+<h2>🔢 التسبيح</h2>
+<div class="counter" id="count">0</div>
+<button onclick="add()">تسبيح</button>
+<button onclick="reset()">إعادة</button>
+</div>
+
+<div class="card">
+<h2>📢 نشر الموقع</h2>
+<button onclick="shareSite()">نسخ رابط الموقع</button>
+<p id="msg"></p>
+</div>
+
+<div class="card">
+<h2>🎧 صوت القرآن</h2>
+<audio controls>
+<source src="https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/1.mp3">
+</audio>
+</div>
+
+</div>
+
+<footer>
+👤 أحمد الدوسري
+</footer>
+
+<script>
+
+let count=0;
+
+const duas=[
+"اللهم ارزقني راحة البال",
+"اللهم اغفر لي ولوالدي",
+"اللهم اهدني ووفقني",
+"اللهم نور قلبي بالإيمان",
+"اللهم اجعلني من الصالحين"
+];
+
+const azkar=[
+"سبحان الله",
+"الحمد لله",
+"الله أكبر",
+"لا إله إلا الله",
+"أستغفر الله",
+"سبحان الله وبحمده",
+"لا حول ولا قوة إلا بالله"
+];
+
+function newDua(){
+document.getElementById("dua").innerText=
+duas[Math.floor(Math.random()*duas.length)];
+}
+
+function newZekr(){
+document.getElementById("zekr").innerText=
+azkar[Math.floor(Math.random()*azkar.length)];
+}
+
+function add(){
+count++;
+document.getElementById("count").innerText=count;
+}
+
+function reset(){
+count=0;
+document.getElementById("count").innerText=count;
+}
+
+/* زر نسخ الرابط */
+function shareSite(){
+navigator.clipboard.writeText(window.location.href);
+document.getElementById("msg").innerText="تم نسخ الرابط ✔️";
+setTimeout(()=>{document.getElementById("msg").innerText="";},2000);
+}
+
+</script>
+
+</body>
+</html>
